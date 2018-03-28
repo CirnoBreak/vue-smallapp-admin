@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { getToken } from '../auth'
+import { getToken, removeToken } from '../auth'
 export default {
   data() {
     return {
@@ -30,14 +30,16 @@ export default {
         //type: 'warning'
       })
         .then(() => {
-          sessionStorage.removeItem("user");
+          removeToken()
+          sessionStorage.removeItem('name')
+          localStorage.removeItem('name')
           _this.$router.push("/login");
         })
         .catch(() => {});
     },
   },
   mounted() {
-    let name = localStorage.getItem('name')
+    let name = localStorage.getItem('name') || sessionStorage.getItem('name')
     if (name) {
       this.sysUserName = name || ""
     }

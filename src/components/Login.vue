@@ -8,7 +8,7 @@
       <el-form-item prop="pass">
         <el-input type="password" placeholder="请输入密码" v-model="ruleForm2.pass" auto-complete="off"></el-input>
       </el-form-item>
-      <el-checkbox v-model="checked" checked class="remember">记住账号</el-checkbox>
+      <el-checkbox v-model="checked" checked class="remember">自动登录</el-checkbox>
       <el-form-item class="btn">
         <el-button type="primary" :loading="logining" @click.native.prevent="submitForm">提交</el-button>
       </el-form-item>
@@ -18,6 +18,7 @@
 
 <script>
 import { reqLogin } from "../api";
+import { setToken } from '../auth'
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
@@ -25,7 +26,6 @@ export default {
         return callback(new Error("账号不能为空"));
       } else {
         callback();
-        console.log(callback());
       }
     };
     var validatePass = (rule, value, callback) => {
@@ -61,17 +61,26 @@ export default {
 
           this.$store
             .dispatch("Login", logParams)
-            .then(code => {
+            .then((res) => {
+              const { code, user, msg, token } = res
+              console.log(token)
               this.logining = false;
               if (code === 200) {
                 this.$message({
-                  message: "登录成功",
+                  message: msg,
                   type: "success"
                 });
+                if (this.checked) {
+                  setToken(token)
+                  // this.$store.dispatch("Remember", token)
+                  localStorage.setItem('name', user.name)
+                } else {
+                  sessionStorage.setItem('name', user.name)
+                }
                 this.$router.push({ path: "/" });
               } else {
                 this.$message({
-                  message: "账号或者密码错误",
+                  message: msg,
                   type: "error"
                 });
               }
