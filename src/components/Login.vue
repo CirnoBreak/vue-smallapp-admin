@@ -1,18 +1,18 @@
 <template>
   <div class="login-page">
     <el-form label-position="left" :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-width="0px" class="demo-ruleForm container">
-    <h2 class="title">学习平台管理系统</h2>
-    <el-form-item prop="account">
-      <el-input v-model="ruleForm2.account" placeholder="请输入用户名" auto-complete="off"></el-input>
-    </el-form-item>
-    <el-form-item prop="pass">
-      <el-input type="password" placeholder="请输入密码" v-model="ruleForm2.pass" auto-complete="off"></el-input>
-    </el-form-item>
-    <el-checkbox v-model="checked" checked class="remember">记住账号</el-checkbox>
-    <el-form-item class="btn">
-      <el-button type="primary" :loading="logining" @click.native.prevent="submitForm">提交</el-button>
-    </el-form-item>
-  </el-form>
+      <h2 class="title">学习平台管理系统</h2>
+      <el-form-item prop="account">
+        <el-input v-model="ruleForm2.account" placeholder="请输入用户名" auto-complete="off"></el-input>
+      </el-form-item>
+      <el-form-item prop="pass">
+        <el-input type="password" placeholder="请输入密码" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+      </el-form-item>
+      <el-checkbox v-model="checked" checked class="remember">记住账号</el-checkbox>
+      <el-form-item class="btn">
+        <el-button type="primary" :loading="logining" @click.native.prevent="submitForm">提交</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
@@ -24,7 +24,8 @@ export default {
       if (!value) {
         return callback(new Error("账号不能为空"));
       } else {
-        callback()
+        callback();
+        console.log(callback());
       }
     };
     var validatePass = (rule, value, callback) => {
@@ -42,8 +43,8 @@ export default {
         account: ""
       },
       rules2: {
-        account: [{ validator: checkAccount, trigger: "blur" }],
-        pass: [{ validator: validatePass, trigger: "blur" }]
+        account: [{ required: true, validator: checkAccount, trigger: "blur" }],
+        pass: [{ required: true, validator: validatePass, trigger: "blur" }]
       },
       checked: true
     };
@@ -57,32 +58,27 @@ export default {
             username: this.ruleForm2.account,
             password: this.ruleForm2.pass
           };
-          // reqLogin(logParams).then(data => {
-          //   this.logining = false;
-          //   let { msg, code, user } = data;
-          //   if (code !== 200) {
-          //     this.$message({
-          //       message: msg,
-          //       type: "error"
-          //     });
-          //   } else {
-          //     this.$message({
-          //       message: msg,
-          //       type: 'success'
-          //     })
-          //     sessionStorage.setItem("user", JSON.stringify(user));
-          //     this.$router.push({ path: "/" }); 
-          //   }
-          // });
-          this.$store.dispatch('Login', logParams).then(() => {
-           console.log('a')
-           this.logining = false
-           console.log(this.$router)
-            this.$router.push({ path: '/' })
-          }).catch(() => {
-            console.log('hehe')
-            this.logining = false
-          })
+
+          this.$store
+            .dispatch("Login", logParams)
+            .then(code => {
+              this.logining = false;
+              if (code === 200) {
+                this.$message({
+                  message: "登录成功",
+                  type: "success"
+                });
+                this.$router.push({ path: "/" });
+              } else {
+                this.$message({
+                  message: "账号或者密码错误",
+                  type: "error"
+                });
+              }
+            })
+            .catch(() => {
+              this.logining = false;
+            });
         } else {
           console.log("error submit!!");
           return false;
@@ -127,6 +123,9 @@ export default {
 }
 .btn {
   text-align: center;
+}
+.el-form-item.is-success /deep/ .el-input__inner {
+  border-color: #dcdfe6 !important;
 }
 </style>
 

@@ -17,11 +17,15 @@ const user = {
     Login({commit}, userInfo) {
       return new Promise((resolve, reject) => {
         reqLogin(userInfo).then(response => {
-          setToken(response.token)
-          commit('SET_TOKEN', response.token)
-          resolve()
+          const { user, token, code } = response
+          // console.log(code)
+          if (code === 200) {
+            setToken(token)
+            commit('SET_TOKEN', response.token)
+            localStorage.setItem('name', user.name)
+          }
+          resolve(code)
         }).catch(error => {
-          console.log('sb')
           reject(error)
         })
       })

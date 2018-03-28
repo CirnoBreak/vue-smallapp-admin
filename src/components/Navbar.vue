@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { getToken } from '../auth'
 export default {
   data() {
     return {
@@ -36,11 +37,9 @@ export default {
     },
   },
   mounted() {
-    var user = sessionStorage.getItem("user");
-    if (user) {
-      user = JSON.parse(user);
-      this.sysUserName = user.name || "";
-      this.sysUserAvatar = user.avatar || "";
+    let name = localStorage.getItem('name')
+    if (name) {
+      this.sysUserName = name || ""
     }
   }
 };
