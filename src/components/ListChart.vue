@@ -2,10 +2,12 @@
   <section class="chart-container" v-loading="listLoading">
     <el-row>
       <el-col :span="12">
-        <div id="chartColumn" style="width:100%; height:400px;"></div>
+        <div id="gradeNum" style="width:100%; height:400px;"></div>
+      </el-col>
+      <el-col :span="12">
+        <div id="gradeSexNum" style="width:100%; height:400px;"></div>
       </el-col>
     </el-row>
-
   </section>
 </template>
 
@@ -17,6 +19,8 @@ export default {
     return {
       users: [],
       gradeNum: [],
+      maleNum: [],
+      femaleNum: [],
       charColumn: null,
       listLoading: true
     };
@@ -30,21 +34,30 @@ export default {
         this.users = res.data.users;
         this.getCharts();
         this.listLoading = false;
-        this.drawColumnChart();
+        this.drawGradeNumChart();
+        this.drawGradeSexNumChart();
       });
     },
     getCharts() {
-      let gradeList = this.users.map((cur, idx, arr) => arr[idx]["grade"]);
+      let gradeList = this.users.map((cur, idx, arr) => arr[idx]["grade"]),
+        sexList = this.users.map((cur, idx, arr) => arr[idx]);
       for (let i = 0; i < 7; i++) {
-        let gNum = gradeList.filter(g => g == i.toString()).length;
+        let gNum = gradeList.filter(g => g == i.toString()).length,
+          mNum = sexList.filter(e => e.sex == "0" && e.grade == i).length,
+          fNum = sexList.filter(e => e.sex == "1" && e.grade == i).length;
         this.gradeNum.push(gNum);
+        this.maleNum.push(mNum);
+        this.femaleNum.push(fNum);
       }
     },
-    drawColumnChart() {
-      this.chartColumn = echarts.init(document.getElementById("chartColumn"));
+    drawGradeNumChart() {
+      this.chartColumn = echarts.init(document.getElementById("gradeNum"));
       this.chartColumn.setOption({
         title: { text: "班级人数分布" },
         tooltip: {},
+        legend: {
+          data: ["人数"]
+        },
         xAxis: {
           data: [
             "15软件1班",
@@ -61,12 +74,11 @@ export default {
           {
             name: "人数",
             type: "bar",
-            type: "bar",
             label: {
               normal: {
-                show: true, 
+                show: true,
                 position: "top",
-                color: 'black'
+                color: "black"
               }
             },
             data: this.gradeNum,
@@ -75,6 +87,59 @@ export default {
                 color: "#33ccc6"
               }
             }
+          }
+        ]
+      });
+    },
+    drawGradeSexNumChart() {
+      this.chartColumn = echarts.init(document.getElementById("gradeSexNum"));
+      this.chartColumn.setOption({
+        title: { text: "班级性别分布" },
+        tooltip: {},
+         legend: {
+          data: ["男", "女"]
+        },
+        xAxis: {
+          data: [
+            "15软件1班",
+            "15软件2班",
+            "15软件3班",
+            "15软件4班",
+            "15软件5班",
+            "15软件6班",
+            "15软件7班"
+          ]
+        },
+        yAxis: {},
+        series: [
+          {
+            name: "男",
+            type: "bar",
+            label: {
+              normal: {
+                show: true,
+                position: "top",
+                color: "black"
+              }
+            },
+            data: this.maleNum,
+            itemStyle: {
+              normal: {
+                color: "#33ccc6"
+              }
+            }
+          },
+          {
+            name: "女",
+            type: "bar",
+            label: {
+              normal: {
+                show: true,
+                position: "top",
+                color: "black"
+              }
+            },
+            data: this.femaleNum
           }
         ]
       });
