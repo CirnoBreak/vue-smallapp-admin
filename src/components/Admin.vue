@@ -16,25 +16,43 @@
     <Navbar></Navbar>
     <el-col :span="24" class="main">
       <aside class="menu-expanded">
-				<!--导航菜单-->
-				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
-					 unique-opened router>
-					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
-						<el-submenu :index="index+''" v-if="!item.leaf">
-							<template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
-							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
-						</el-submenu>
-						<el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path" style="padding-left: 10px;"><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
-					</template>
-				</el-menu>
-			</aside>
+        <!--导航菜单-->
+        <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened router>
+          <template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
+            <el-submenu :index="index+''" v-if="!item.leaf">
+              <template slot="title">
+                <i :class="item.iconCls"></i>{{item.name}}</template>
+              <el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
+            </el-submenu>
+            <el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path" style="padding-left: 10px;">
+              <i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
+          </template>
+        </el-menu>
+      </aside>
+    <section class="content-container">
+      <div class="grid-content bg-purple-light">
+        <el-col :span="24" class="breadcrumb-container">
+          <strong class="title">{{$route.name}}</strong>
+          <el-breadcrumb separator="/" class="breadcrumb-inner">
+            <el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
+              {{ item.name }}
+            </el-breadcrumb-item>
+          </el-breadcrumb>
+        </el-col>
+        <el-col :span="24" class="content-wrapper">
+          <transition name="fade" mode="out-in">
+            <router-view></router-view>
+          </transition>
+        </el-col>
+      </div>
+    </section>
     </el-col>
   </el-row>
 </template>
 
 
 <script>
-import Navbar from './Navbar'
+import Navbar from "./Navbar";
 export default {
   components: {
     Navbar
@@ -56,27 +74,8 @@ export default {
   methods: {
     onSubmit() {
       console.log("submit!");
-    },
-    handleopen() {
-      //console.log('handleopen');
-    },
-    handleclose() {
-      //console.log('handleclose');
-    },
-    handleselect: function(a, b) {},
-    //退出登录
-    
-    //折叠导航栏
-    collapse: function() {
-      this.collapsed = !this.collapsed;
-    },
-    showMenu(i, status) {
-      this.$refs.menuCollapsed.getElementsByClassName(
-        "submenu-hook-" + i
-      )[0].style.display = status ? "block" : "none";
     }
-  },
-  
+  }
 };
 </script>
 
@@ -152,5 +151,6 @@ export default {
       }
     }
   }
+
 }
 </style>

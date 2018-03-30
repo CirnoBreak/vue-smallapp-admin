@@ -63,7 +63,7 @@ export default {
             .dispatch("Login", logParams)
             .then((res) => {
               const { code, user, msg, token } = res
-              console.log(token)
+              // console.log(token)
               this.logining = false;
               if (code === 200) {
                 this.$message({
@@ -71,13 +71,13 @@ export default {
                   type: "success"
                 });
                 if (this.checked) {
-                  setToken(token)
+                  // setToken(token)
                   // this.$store.dispatch("Remember", token)
                   localStorage.setItem('name', user.name)
                 } else {
                   sessionStorage.setItem('name', user.name)
                 }
-                this.$router.push({ path: "/" });
+                this.$router.push({ path: "/table" });
               } else {
                 this.$message({
                   message: msg,

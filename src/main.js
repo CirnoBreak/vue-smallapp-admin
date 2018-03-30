@@ -22,10 +22,9 @@ const router = new VueRouter({routes})
 const whiteList = ['/login'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   let user = localStorage.getItem('name') || sessionStorage.getItem('name')
-  console.log(user)
   if (user) {
     if (to.path === '/login') {
-      next({ path: '/' })
+      next({ path: '/table' })
     } else {
       next()
     }

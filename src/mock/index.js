@@ -1,6 +1,9 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import { LoginUsers } from './data/user'
+import { LoginUsers, UsersInfo } from './data/user'
+
+let _UsersInfo  = UsersInfo
+
 export default {
   bootstrap() {
     let mock = new MockAdapter(axios)
@@ -48,5 +51,112 @@ export default {
           }, 1000);
         });
       });
+      //获取用户列表
+    mock.onGet('/user/list').reply(() => {
+      // let {name} = config.params;
+      // let mockUsers = _UsersInfo.filter(user => {
+      //   if (name && user.name.indexOf(name) == -1) return false;
+      //   return true;
+      // });
+      let mockUsers = _UsersInfo
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            users: mockUsers
+          }]);
+        }, 1000);
+      });
+    });
+
+    //获取用户列表（分页）
+    mock.onGet('/user/listpage').reply(config => {
+      let {page, name, grade} = config.params;
+      let mockUsers = _UsersInfo.filter(user => {
+        if (name && user.name.indexOf(name) == -1) return false;
+        if (grade && user.grade.toString().indexOf(grade) == -1) return false;
+        // if (name && grade && user.name.indexOf(name) == -1 && user.grade.toString().indexOf(grade) == -1) return false;
+        return true;
+      });
+      let total = mockUsers.length;
+      mockUsers = mockUsers.filter((u, index) => index < 20 * page && index >= 20 * (page - 1));
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            total: total,
+            users: mockUsers
+          }]);
+        }, 1000);
+      });
+    });
+
+    //删除用户
+    mock.onGet('/user/remove').reply(config => {
+      let { id } = config.params;
+      _UsersInfo = _UsersInfo.filter(u => u.id !== id);
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '删除成功'
+          }]);
+        }, 500);
+      });
+    });
+
+    //批量删除用户
+    mock.onGet('/user/batchremove').reply(config => {
+      let { ids } = config.params;
+      ids = ids.split(',');
+      _UsersInfo = _UsersInfo.filter(u => !ids.includes(u.id));
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '删除成功'
+          }]);
+        }, 500);
+      });
+    });
+
+    //编辑用户
+    mock.onGet('/user/edit').reply(config => {
+      let { id, name, addr, age, birth, sex } = config.params;
+      _UsersInfo.some(u => {
+        if (u.id === id) {
+          u.name = name;
+          u.addr = addr;
+          u.age = age;
+          u.sex = sex;
+          return true;
+        }
+      });
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '编辑成功'
+          }]);
+        }, 500);
+      });
+    });
+
+    //新增用户
+    mock.onGet('/user/add').reply(config => {
+      let { name, addr, age,  sex } = config.params;
+      _UsersInfo.push({
+        name: name,
+        addr: addr,
+        age: age,
+        sex: sex
+      });
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '新增成功'
+          }]);
+        }, 500);
+      });
+    });
   }
 }
