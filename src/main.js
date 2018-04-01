@@ -7,7 +7,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
-import routes from './routes'
+import routes from './router'
 import Mock from './mock'
 import store from './store'
 import { getToken } from './auth'
@@ -23,8 +23,8 @@ const whiteList = ['/login'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   let user = localStorage.getItem('name') || sessionStorage.getItem('name')
   if (user) {
-    if (to.path === '/login') {
-      next({ path: '/table' })
+    if (to.path === '/login' || to.path === '/') {
+      next({ path: '/stuList' })
     } else {
       next()
     }
@@ -35,8 +35,13 @@ router.beforeEach((to, from, next) => {
       next('/login')
     }
   }
-
 })
+
+router.afterEach((to, from) => {
+  document.title = to.name
+  console.log(to.name)
+})
+
 
 /* eslint-disable no-new */
 new Vue({

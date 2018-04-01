@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { getUserListPage } from "../api";
+import { getUserListPage } from "../../api";
 
 export default {
   data() {

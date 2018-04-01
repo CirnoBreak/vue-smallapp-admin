@@ -148,6 +148,7 @@ export default {
       .content-wrapper {
         background-color: #fff;
         box-sizing: border-box;
+        padding-top: 30px;
       }
     }
   }

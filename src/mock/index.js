@@ -1,8 +1,9 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { LoginUsers, UsersInfo } from './data/user'
-
+import { Homework } from './data/homework'
 let _UsersInfo  = UsersInfo
+let _Homework = Homework
 
 export default {
   bootstrap() {
@@ -53,11 +54,6 @@ export default {
       });
       //获取用户列表
     mock.onGet('/user/list').reply(() => {
-      // let {name} = config.params;
-      // let mockUsers = _UsersInfo.filter(user => {
-      //   if (name && user.name.indexOf(name) == -1) return false;
-      //   return true;
-      // });
       let mockUsers = _UsersInfo
       return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -76,7 +72,7 @@ export default {
         if (grade && user.grade.toString().indexOf(grade) == -1) return false;
         // if (name && grade && user.name.indexOf(name) == -1 && user.grade.toString().indexOf(grade) == -1) return false;
         return true;
-      });
+      }).sort((a, b) => a['grade'] - b['grade']);
       let total = mockUsers.length;
       mockUsers = mockUsers.filter((u, index) => index < 20 * page && index >= 20 * (page - 1));
       return new Promise((resolve, reject) => {
@@ -154,6 +150,71 @@ export default {
           resolve([200, {
             code: 200,
             msg: '新增成功'
+          }]);
+        }, 500);
+      });
+    });
+    //获取作业列表
+    mock.onGet('/homework/list').reply(() => {
+      let mockHomework = _Homework
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            users: mockHomework
+          }]);
+        }, 1000);
+      });
+    });
+
+    //获取作业列表（分页）
+    mock.onGet('/homework/listpage').reply(config => {
+      let {page, title, grade} = config.params;
+      let mockHomework = _Homework.filter(hw => {
+        if (title && hw.title.indexOf(title) == -1) return false;
+        if (grade && hw.grade.toString().indexOf(grade) == -1) return false;
+        return true;
+      }).sort((a, b) => new Date(b['date']) - new Date(a['date']));
+      let total = mockHomework.length;
+      mockHomework = mockHomework.filter((u, index) => index < 20 * page && index >= 20 * (page - 1));
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            total: total,
+            homework: mockHomework
+          }]);
+        }, 1000);
+      });
+    });
+
+    //编辑作业
+    mock.onGet('/homework/edit').reply(config => {
+      let { id, title, content } = config.params;
+      _Homework.some(u => {
+        if (u.id === id) {
+          u.title = title;
+          u.content = content;
+          return true;
+        }
+      });
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '编辑成功'
+          }]);
+        }, 500);
+      });
+    });
+
+    //删除用户
+    mock.onGet('/homework/remove').reply(config => {
+      let { id } = config.params;
+      _Homework = _Homework.filter(u => u.id !== id);
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '删除成功'
           }]);
         }, 500);
       });

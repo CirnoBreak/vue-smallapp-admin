@@ -77,7 +77,7 @@ export default {
                 } else {
                   sessionStorage.setItem('name', user.name)
                 }
-                this.$router.push({ path: "/table" });
+                this.$router.push({ path: "/stuList" });
               } else {
                 this.$message({
                   message: msg,
@@ -133,8 +133,10 @@ export default {
 .btn {
   text-align: center;
 }
-.el-form-item.is-success /deep/ .el-input__inner {
-  border-color: #dcdfe6 !important;
+.el-form-item.is-success {
+  /deep/ .el-input__inner {
+    border-color: #dcdfe6;
+  }
 }
 </style>
 
