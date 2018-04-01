@@ -15,9 +15,9 @@ const LoginUsers = [
   }
 ]
 
-const UsersInfo = []
+const StudentsInfo = []
 for (let i = 0; i < 500; i++) {
-  UsersInfo.push(Mock.mock({
+  StudentsInfo.push(Mock.mock({
     id: Mock.mock('@id').slice(0, 10),
     name: Mock.Random.cname(),
     'age|20-22': 1,
@@ -26,4 +26,4 @@ for (let i = 0; i < 500; i++) {
     phone: Mock.mock('@id').slice(0, 11)
   }));
 }
-export { LoginUsers, UsersInfo }
+export { LoginUsers, StudentsInfo }

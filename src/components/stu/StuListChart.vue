@@ -13,11 +13,11 @@
 
 <script>
 import echarts from "echarts";
-import { getUserList } from "../../api";
+import { getStudentList } from "../../api";
 export default {
   data() {
     return {
-      users: [],
+      students: [],
       gradeNum: [],
       maleNum: [],
       femaleNum: [],
@@ -26,25 +26,26 @@ export default {
     };
   },
   mounted() {
-    this.getUser();
+    this.getStudent();
     this.drawCharts()
   },
   updated() {
     this.drawCharts()
   },
   methods: {
-    getUser() {
-      getUserList().then(res => {
-        this.users = res.data.users;
+    getStudent() {
+      getStudentList().then(res => {
+        console.log(res)
+        this.students = res.data.students;
         this.getCharts();
         this.listLoading = false;
         
       });
     },
     getCharts() {
-      // 把从后台获取到的users分别遍历并赋值
-      let gradeList = this.users.map((cur, idx, arr) => arr[idx]["grade"]), //获取所有数据里面的班级编号
-        sexList = this.users.map((cur, idx, arr) => arr[idx]); //获取所有单条数据，用于性别遍历
+      // 把从后台获取到的students分别遍历并赋值
+      let gradeList = this.students.map((cur, idx, arr) => arr[idx]["grade"]), //获取所有数据里面的班级编号
+        sexList = this.students.map((cur, idx, arr) => arr[idx]); //获取所有单条数据，用于性别遍历
       for (let i = 0; i < 7; i++) {
         let gNum = gradeList.filter(g => g == i.toString()).length, // 获取每个班的人数
           mNum = sexList.filter(e => e.sex == "0" && e.grade == i).length, // 获取每个班的男同学数量

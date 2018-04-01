@@ -10,7 +10,6 @@
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
-
       </el-form>
     </el-col>
 
@@ -57,7 +56,7 @@
 </template>
 
 <script>
-import { getHomeworkListPage, editHomework, removeHomework } from "../api";
+import { getHomeworkListPage, editHomework, removeHomework } from "../../api";
 export default {
   data() {
     return {
@@ -122,7 +121,7 @@ export default {
     formatGrade(row, column) {
       return "15软件" + (row.grade + 1) + "班";
     },
-    //获取用户列表
+    //获取作业列表
     getHomework() {
       let para = {
         page: this.page,
@@ -145,7 +144,7 @@ export default {
       this.editFormVisible = true;
       this.editForm = Object.assign({}, row);
     },
-    //编辑
+    //编辑作业内容
     editHomeworkSubmit: function() {
       this.$refs.editForm.validate(valid => {
         if (valid) {
@@ -166,7 +165,7 @@ export default {
         }
       });
     },
-    //删除
+    //删除作业内容
     handleDel: function(index, row) {
       this.$confirm("确认删除该记录吗?", "提示", {
         type: "warning"

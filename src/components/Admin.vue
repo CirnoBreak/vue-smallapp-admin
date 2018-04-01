@@ -1,18 +1,5 @@
 <template>
   <el-row class="container">
-    <!-- <el-col :span="24" class="header">
-      <el-col :span="3" class="title">{{sysName}}</el-col>
-      <el-col :span="3" class="userinfo">
-        <el-dropdown trigger="click">
-          <span class="el-dropdown-link userinfo-inner">{{sysUserName}}</span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>我的消息</el-dropdown-item>
-            <el-dropdown-item>设置</el-dropdown-item>
-            <el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </el-col>
-    </el-col> -->
     <Navbar></Navbar>
     <el-col :span="24" class="main">
       <aside class="menu-expanded">
@@ -56,20 +43,6 @@ import Navbar from "./Navbar";
 export default {
   components: {
     Navbar
-  },
-  data() {
-    return {
-      form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: ""
-      }
-    };
   },
   methods: {
     onSubmit() {

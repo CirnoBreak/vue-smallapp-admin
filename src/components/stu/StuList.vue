@@ -4,9 +4,9 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
 				<el-form-item>
-					<el-input v-model="filters.name" @keyup.native="getUsers" placeholder="姓名"></el-input>
+					<el-input v-model="filters.name" @keyup.native="getStudents" placeholder="姓名"></el-input>
 				</el-form-item>
-				<el-select v-model="filters.grade" v-on:change="getUsers" placeholder="请选择班级">
+				<el-select v-model="filters.grade" v-on:change="getStudents" placeholder="请选择班级">
 					<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
@@ -15,7 +15,7 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="users" highlight-current-row v-loading="listLoading">
+		<el-table :data="students" highlight-current-row v-loading="listLoading">
 			<el-table-column prop="id" label="学号" width="160">
 			</el-table-column>
 			<el-table-column prop="name" label="姓名" width="120">
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { getUserListPage } from "../../api";
+import { getStudentListPage } from "../../api";
 
 export default {
   data() {
@@ -84,7 +84,7 @@ export default {
           label: "15软件7班"
         }
       ],
-      users: [],
+      students: [],
       total: 0,
       page: 1,
       listLoading: false
@@ -99,27 +99,27 @@ export default {
     formatGrade(row, column) {
       return "15软件" + (row.grade + 1) + "班";
     },
-    //获取用户列表
-    getUsers() {
+    //获学生列表
+    getStudents() {
       let para = {
         page: this.page,
         name: this.filters.name,
         grade: this.filters.grade
       };
       this.listLoading = true;
-      getUserListPage(para).then(res => {
+      getStudentListPage(para).then(res => {
         this.total = res.data.total;
-        this.users = res.data.users;
+        this.students = res.data.students;
         this.listLoading = false;
       });
     },
     handleCurrentChange(val) {
       this.page = val;
-      this.getUsers();
+      this.getStudents();
     }
   },
   mounted() {
-    this.getUsers();
+    this.getStudents();
   }
 };
 </script>

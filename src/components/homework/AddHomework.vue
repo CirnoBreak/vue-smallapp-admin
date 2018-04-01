@@ -7,8 +7,8 @@
       <el-form-item label="作业内容" prop="content">
         <el-input type="textarea" v-model="addForm.content" autosize resize="none"></el-input>
       </el-form-item>
-      <el-form-item label="班级" prop="grade">
-        <el-select v-model="grade" placeholder="请选择班级">
+      <el-form-item label="班级">
+        <el-select v-model="addForm.grade" prop="grade" placeholder="请选择班级">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import { addHomework } from '../../api'
+import moment from 'moment'
 export default {
   data() {
     return {
@@ -32,10 +34,6 @@ export default {
         grade: [{ required: true, message: "班级要选择", trigger: "blur" }]
       },
       options: [
-        {
-          value: null,
-          label: "全部"
-        },
         {
           value: "0",
           label: "15软件1班"
@@ -65,17 +63,44 @@ export default {
           label: "15软件7班"
         }
       ],
-      grade: "",
       addForm: {
         title: "",
         content: "",
         grade: "",
       }
     };
+  },
+  methods: {
+    //新增
+			addSubmit: function () {
+				this.$refs.addForm.validate((valid) => {
+					if (valid) {
+						this.$confirm('确认提交吗？', '提示', {}).then(() => {
+							this.addLoading = true;
+              let para = Object.assign({}, this.addForm);
+              para.grade = parseInt(para.grade);
+							para.date = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+							addHomework(para).then((res) => {
+								this.addLoading = false;
+								this.$message({
+									message: '发布作业成功',
+									type: 'success'
+								});
+								this.$refs['addForm'].resetFields();
+                this.$router.push({ path: "/homeworkList" });
+							});
+						});
+					}
+				});
+			},
   }
 };
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+.el-form-item.is-success {
+  /deep/ .el-input__inner, /deep/ .el-textarea__inner {
+    border-color: #dcdfe6;
+  }
+}
 </style>

@@ -5,7 +5,7 @@ import App from './App'
 // import routes from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
-import Vuex from 'vuex'
+// import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import routes from './router'
 import Mock from './mock'
@@ -14,7 +14,7 @@ import { getToken } from './auth'
 Mock.bootstrap();
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-Vue.use(Vuex)
+// Vue.use(Vuex)
 Vue.use(VueRouter)
 
 const router = new VueRouter({routes})
@@ -47,7 +47,7 @@ router.afterEach((to, from) => {
 new Vue({
   // el: '#app',
   router,
-  store,
+  // store,
   render: h => h(App),
   // components: { App },
   template: '<App/>'
