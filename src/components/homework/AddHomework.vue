@@ -15,7 +15,6 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
-        <el-button @click.native="addFormVisible = false">取消</el-button>
       </el-form-item>
     </el-form>
   </section>
@@ -68,7 +67,7 @@ export default {
         content: "",
         grade: "",
       }
-    };
+    }
   },
   methods: {
     //新增
@@ -76,25 +75,25 @@ export default {
 				this.$refs.addForm.validate((valid) => {
 					if (valid) {
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.addLoading = true;
-              let para = Object.assign({}, this.addForm);
-              para.grade = parseInt(para.grade);
+							this.addLoading = true
+              let para = Object.assign({}, this.addForm)
+              para.grade = parseInt(para.grade)
 							para.date = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss')
 							addHomework(para).then((res) => {
-								this.addLoading = false;
+								this.addLoading = false
 								this.$message({
 									message: '发布作业成功',
 									type: 'success'
-								});
-								this.$refs['addForm'].resetFields();
-                this.$router.push({ path: "/homeworkList" });
-							});
-						});
+								})
+								this.$refs['addForm'].resetFields()
+                this.$router.push({ path: "/homeworkList" })
+							})
+						})
 					}
-				});
+				})
 			},
   }
-};
+}
 </script>
 
 <style scoped lang="less">

@@ -46,8 +46,8 @@
           <el-input type="textarea" v-model="editForm.content" autosize resize="none"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click.native="editHomeworkSubmit" :loading="editLoading">提交</el-button>
           <el-button @click.native="editFormVisible = false">取消</el-button>
+          <el-button type="primary" @click.native="editHomeworkSubmit" :loading="editLoading">提交</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { getHomeworkListPage, editHomework, removeHomework } from "../../api";
+import { getHomeworkListPage, editHomework, removeHomework } from "../../api"
 export default {
   data() {
     return {
@@ -114,12 +114,12 @@ export default {
         title: "",
         content: ""
       }
-    };
+    }
   },
   methods: {
     // 班级转换
     formatGrade(row, column) {
-      return "15软件" + (row.grade + 1) + "班";
+      return "15软件" + (row.grade + 1) + "班"
     },
     //获取作业列表
     getHomework() {
@@ -127,43 +127,43 @@ export default {
         page: this.page,
         title: this.filters.title,
         grade: this.filters.grade
-      };
-      this.listLoading = true;
+      }
+      this.listLoading = true
       getHomeworkListPage(para).then(res => {
-        this.total = res.data.total;
-        console.log(res.data);
-        this.homework = res.data.homework;
-        this.listLoading = false;
-      });
+        this.total = res.data.total
+        console.log(res.data)
+        this.homework = res.data.homework
+        this.listLoading = false
+      })
     },
     handleCurrentChange(val) {
-      this.page = val;
-      this.getHomework();
+      this.page = val
+      this.getHomework()
     },
     handleEdit(index, row) {
-      this.editFormVisible = true;
-      this.editForm = Object.assign({}, row);
+      this.editFormVisible = true
+      this.editForm = Object.assign({}, row)
     },
     //编辑作业内容
     editHomeworkSubmit: function() {
       this.$refs.editForm.validate(valid => {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
-            this.editLoading = true;
-            let para = Object.assign({}, this.editForm);
+            this.editLoading = true
+            let para = Object.assign({}, this.editForm)
             editHomework(para).then(res => {
-              this.editLoading = false;
+              this.editLoading = false
               this.$message({
                 message: "提交成功",
                 type: "success"
-              });
-              this.$refs["editForm"].resetFields();
-              this.editFormVisible = false;
-              this.getHomework();
-            });
-          });
+              })
+              this.$refs["editForm"].resetFields()
+              this.editFormVisible = false
+              this.getHomework()
+            })
+          })
         }
-      });
+      })
     },
     //删除作业内容
     handleDel: function(index, row) {
@@ -171,24 +171,24 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.listLoading = true;
-          let para = { id: row.id };
+          this.listLoading = true
+          let para = { id: row.id }
           removeHomework(para).then(res => {
-            this.listLoading = false;
+            this.listLoading = false
             this.$message({
               message: "删除成功",
               type: "success"
-            });
-            this.getHomework();
-          });
+            })
+            this.getHomework()
+          })
         })
-        .catch(() => {});
+        .catch(() => {})
     }
   },
   mounted() {
-    this.getHomework();
+    this.getHomework()
   }
-};
+}
 </script>
 
 <style scoped lang="less">

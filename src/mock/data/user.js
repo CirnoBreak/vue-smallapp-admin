@@ -24,6 +24,6 @@ for (let i = 0; i < 500; i++) {
     sex: Mock.Random.integer(0, 1),
     grade: Mock.Random.integer(0,6),
     phone: Mock.mock('@id').slice(0, 11)
-  }));
+  }))
 }
 export { LoginUsers, StudentsInfo }

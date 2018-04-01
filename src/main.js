@@ -4,22 +4,23 @@ import Vue from 'vue'
 import App from './App'
 // import routes from './router'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css';
-// import Vuex from 'vuex'
+import 'element-ui/lib/theme-chalk/index.css'
+import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import routes from './router'
 import Mock from './mock'
 import store from './store'
 import { getToken } from './auth'
-Mock.bootstrap();
+Mock.bootstrap()
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-// Vue.use(Vuex)
+Vue.use(Vuex)
 Vue.use(VueRouter)
 
 const router = new VueRouter({routes})
 
 const whiteList = ['/login'] // 不重定向白名单
+// 路由拦截
 router.beforeEach((to, from, next) => {
   let user = localStorage.getItem('name') || sessionStorage.getItem('name')
   if (user) {
@@ -36,19 +37,16 @@ router.beforeEach((to, from, next) => {
     }
   }
 })
-
+// 设置标签页的标题为路由名字
 router.afterEach((to, from) => {
   document.title = to.name
-  console.log(to.name)
 })
 
 
 /* eslint-disable no-new */
 new Vue({
-  // el: '#app',
   router,
-  // store,
+  store,
   render: h => h(App),
-  // components: { App },
   template: '<App/>'
 }).$mount('#app')

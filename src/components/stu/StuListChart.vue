@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import echarts from "echarts";
-import { getStudentList } from "../../api";
+import echarts from "echarts"
+import { getStudentList } from "../../api"
 export default {
   data() {
     return {
@@ -23,10 +23,10 @@ export default {
       femaleNum: [],
       charColumn: null,
       listLoading: true
-    };
+    }
   },
   mounted() {
-    this.getStudent();
+    this.getStudent()
     this.drawCharts()
   },
   updated() {
@@ -36,29 +36,28 @@ export default {
     getStudent() {
       getStudentList().then(res => {
         console.log(res)
-        this.students = res.data.students;
-        this.getCharts();
-        this.listLoading = false;
-        
-      });
+        this.students = res.data.students
+        this.getCharts()
+        this.listLoading = false
+      })
     },
     getCharts() {
       // 把从后台获取到的students分别遍历并赋值
       let gradeList = this.students.map((cur, idx, arr) => arr[idx]["grade"]), //获取所有数据里面的班级编号
-        sexList = this.students.map((cur, idx, arr) => arr[idx]); //获取所有单条数据，用于性别遍历
+        sexList = this.students.map((cur, idx, arr) => arr[idx]) //获取所有单条数据，用于性别遍历
       for (let i = 0; i < 7; i++) {
         let gNum = gradeList.filter(g => g == i.toString()).length, // 获取每个班的人数
           mNum = sexList.filter(e => e.sex == "0" && e.grade == i).length, // 获取每个班的男同学数量
-          fNum = sexList.filter(e => e.sex == "1" && e.grade == i).length; //获取每个班的女同学数量
+          fNum = sexList.filter(e => e.sex == "1" && e.grade == i).length //获取每个班的女同学数量
         // 储存到data，用于图表展示
-        this.gradeNum.push(gNum); 
-        this.maleNum.push(mNum);
-        this.femaleNum.push(fNum);
+        this.gradeNum.push(gNum)
+        this.maleNum.push(mNum)
+        this.femaleNum.push(fNum)
       }
     },
     // 绘出班级人数图表
     drawGradeNumChart() {
-      this.chartColumn = echarts.init(document.getElementById("gradeNum"));
+      this.chartColumn = echarts.init(document.getElementById("gradeNum"))
       this.chartColumn.setOption({
         title: { text: "班级人数分布" },
         tooltip: {},
@@ -96,11 +95,11 @@ export default {
             }
           }
         ]
-      });
+      })
     },
     // 绘出班级性别分布图表
     drawGradeSexNumChart() {
-      this.chartColumn = echarts.init(document.getElementById("gradeSexNum"));
+      this.chartColumn = echarts.init(document.getElementById("gradeSexNum"))
       this.chartColumn.setOption({
         title: { text: "班级性别分布" },
         tooltip: {},
@@ -150,14 +149,14 @@ export default {
             data: this.femaleNum
           }
         ]
-      });
+      })
     },
     drawCharts () {
-      this.drawGradeNumChart();
-      this.drawGradeSexNumChart();
+      this.drawGradeNumChart()
+      this.drawGradeSexNumChart()
     }
   }
-};
+}
 </script>
 
 <style scoped lang="less">

@@ -17,24 +17,24 @@
 </template>
 
 <script>
-import { reqLogin } from "../api";
+import { reqLogin } from "../api"
 import { setToken } from '../auth'
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error("账号不能为空"));
+        return callback(new Error("账号不能为空"))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     var validatePass = (rule, value, callback) => {
       if (value === "") {
-        callback(new Error("请输入密码"));
+        callback(new Error("请输入密码"))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
 
     return {
       logining: false,
@@ -47,29 +47,29 @@ export default {
         pass: [{ required: true, validator: validatePass, trigger: "blur" }]
       },
       checked: true
-    };
+    }
   },
   methods: {
     submitForm(e) {
       this.$refs.ruleForm2.validate(valid => {
         if (valid) {
-          this.logining = true;
+          this.logining = true
           let logParams = {
             username: this.ruleForm2.account,
             password: this.ruleForm2.pass
-          };
+          }
 
           this.$store
             .dispatch("Login", logParams)
             .then((res) => {
               const { code, user, msg, token } = res
               // console.log(token)
-              this.logining = false;
+              this.logining = false
               if (code === 200) {
                 this.$message({
                   message: msg,
                   type: "success"
-                });
+                })
                 if (this.checked) {
                   // setToken(token)
                   // this.$store.dispatch("Remember", token)
@@ -77,25 +77,25 @@ export default {
                 } else {
                   sessionStorage.setItem('name', user.name)
                 }
-                this.$router.push({ path: "/stuList" });
+                this.$router.push({ path: "/stuList" })
               } else {
                 this.$message({
                   message: msg,
                   type: "error"
-                });
+                })
               }
             })
             .catch(() => {
-              this.logining = false;
-            });
+              this.logining = false
+            })
         } else {
-          console.log("error submit!!");
-          return false;
+          console.log("error submit!!")
+          return false
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

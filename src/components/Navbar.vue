@@ -19,37 +19,37 @@
 </template>
 
 <script>
-import { getToken, removeToken } from "../auth";
+import { getToken, removeToken } from "../auth"
 export default {
   data() {
     return {
       sysName: "学习平台管理系统",
       sysUserName: "",
       down: true
-    };
+    }
   },
   methods: {
     logout: function() {
-      var _this = this;
+      var _this = this
       this.$confirm("确认退出吗?", "提示", {
         //type: 'warning'
       })
         .then(() => {
           // removeToken()
-          sessionStorage.removeItem("name");
-          localStorage.removeItem("name");
-          _this.$router.push("/login");
+          sessionStorage.removeItem("name")
+          localStorage.removeItem("name")
+          _this.$router.push("/login")
         })
-        .catch(() => {});
+        .catch(() => {})
     }
   },
   mounted() {
-    let name = localStorage.getItem("name") || sessionStorage.getItem("name");
+    let name = localStorage.getItem("name") || sessionStorage.getItem("name")
     if (name) {
-      this.sysUserName = name || "";
+      this.sysUserName = name || ""
     }
   }
-};
+}
 </script>
 
 <style scoped lang="less">

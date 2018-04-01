@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { getStudentListPage } from "../../api";
+import { getStudentListPage } from "../../api"
 
 export default {
   data() {
@@ -88,16 +88,16 @@ export default {
       total: 0,
       page: 1,
       listLoading: false
-    };
+    }
   },
   methods: {
     //性别显示转换
     formatSex(row, column) {
-      return row.sex == 1 ? "男" : row.sex == 0 ? "女" : "未知";
+      return row.sex == 1 ? "男" : row.sex == 0 ? "女" : "未知"
     },
     // 班级转换
     formatGrade(row, column) {
-      return "15软件" + (row.grade + 1) + "班";
+      return "15软件" + (row.grade + 1) + "班"
     },
     //获学生列表
     getStudents() {
@@ -105,23 +105,23 @@ export default {
         page: this.page,
         name: this.filters.name,
         grade: this.filters.grade
-      };
-      this.listLoading = true;
+      }
+      this.listLoading = true
       getStudentListPage(para).then(res => {
-        this.total = res.data.total;
-        this.students = res.data.students;
-        this.listLoading = false;
-      });
+        this.total = res.data.total
+        this.students = res.data.students
+        this.listLoading = false
+      })
     },
     handleCurrentChange(val) {
-      this.page = val;
-      this.getStudents();
+      this.page = val
+      this.getStudents()
     }
   },
   mounted() {
-    this.getStudents();
+    this.getStudents()
   }
-};
+}
 </script>
 
 <style>

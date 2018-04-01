@@ -9,7 +9,7 @@ for (let i = 0; i < 50; i++) {
     content: Mock.Random.cparagraph(),
     date: Mock.Random.datetime(),
     grade: Mock.Random.integer(0,6)
-  }));
+  }))
 }
 
 export { Homework }
