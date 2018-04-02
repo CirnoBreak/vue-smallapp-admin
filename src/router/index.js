@@ -4,6 +4,9 @@ import StuList from '../components/stu/StuList.vue'
 import StuListChart from '../components/stu/StuListChart.vue'
 import HomeworkList from '../components/homework/HomeworkList.vue'
 import AddHomework from '../components/homework/AddHomework.vue'
+import NoticeList from '../components/notice/NoticeList.vue'
+import AddNotice from '../components/notice/AddNotice.vue'
+import NotFound from '../components/404.vue'
 let routes = [
   {
     path: '/login',
@@ -30,7 +33,7 @@ let routes = [
     path: '/',
     component: Admin,
     name: '作业管理',
-    iconCls: 'el-icon-message', //图标样式class
+    iconCls: 'el-icon-document', //图标样式class
     children: [
       {
         path: '/homework',
@@ -43,11 +46,26 @@ let routes = [
       }
     ]
   }, {
+    path: '/',
+    component: Admin,
+    name: '通知管理',
+    iconCls: 'el-icon-message', //图标样式class
+    children: [
+      {
+        path: '/notice',
+        component: AddNotice,
+        name: '通知发布'
+      }, {
+        path: '/noticeList',
+        component: NoticeList,
+        name: '通知列表'
+      }
+    ]
+  }, {
     path: '*',
     hidden: true,
-    redirect: {
-      path: '/404'
-    }
+    component: NotFound,
+    name: '页面不存在',
   }
 ]
 

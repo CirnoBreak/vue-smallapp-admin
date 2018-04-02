@@ -2,8 +2,10 @@ import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import { LoginUsers, StudentsInfo } from './data/user'
 import { Homework } from './data/homework'
+import { Notice } from './data/notice'
 let _StudentsInfo  = StudentsInfo
 let _Homework = Homework
+let _Notice = Notice
 
 export default {
   bootstrap() {
@@ -141,6 +143,77 @@ export default {
     mock.onGet('/homework/add').reply(config => {
       let { title, content, grade, date } = config.params
       _Homework.push({
+        title: title,
+        content: content,
+        grade: grade,
+        date: date
+      })
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '新增成功'
+          }])
+        }, 500)
+      })
+    })
+    //获取通知列表（分页）
+    mock.onGet('/notice/listpage').reply(config => {
+      let {page, title, grade} = config.params
+      let mockNotice = _Notice.filter(hw => {
+        if (title && hw.title.indexOf(title) == -1) return false
+        if (grade && hw.grade.toString().indexOf(grade) == -1) return false
+        return true
+      }).sort((a, b) => new Date(b['date']) - new Date(a['date']))
+      let total = mockNotice.length
+      mockNotice = mockNotice.filter((u, index) => index < 20 * page && index >= 20 * (page - 1))
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            total: total,
+            notice: mockNotice
+          }])
+        }, 1000)
+      })
+    })
+
+    //编辑通知
+    mock.onGet('/notice/edit').reply(config => {
+      let { id, title, content } = config.params
+      _Notice.some(u => {
+        if (u.id === id) {
+          u.title = title
+          u.content = content
+          return true
+        }
+      })
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '编辑成功'
+          }])
+        }, 500)
+      })
+    })
+
+    //删除通知
+    mock.onGet('/notice/remove').reply(config => {
+      let { id } = config.params
+      _Notice = _Notice.filter(u => u.id !== id)
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '删除成功'
+          }])
+        }, 500)
+      })
+    })
+    // 发布通知
+    mock.onGet('/notice/add').reply(config => {
+      let { title, content, grade, date } = config.params
+      _Notice.push({
         title: title,
         content: content,
         grade: grade,
