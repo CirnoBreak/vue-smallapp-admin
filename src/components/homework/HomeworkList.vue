@@ -4,9 +4,9 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters">
         <el-form-item>
-          <el-input v-model="filters.title" @keyup.native="getHomework" placeholder="作业名称"></el-input>
+          <el-input v-model="filters.title" @keyup.native="searchHomework" placeholder="作业标题"></el-input>
         </el-form-item>
-        <el-select v-model="filters.grade" v-on:change="getHomework" placeholder="请选择班级">
+        <el-select v-model="filters.grade" v-on:change="getHomework($event)" placeholder="请选择班级">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
@@ -120,6 +120,13 @@ export default {
     // 班级转换
     formatGrade(row, column) {
       return "15软件" + (row.grade + 1) + "班"
+    },
+    searchHomework(e) {
+      if (e.keyCode >=65 && e.keyCode <=90 || e.keyCode == 8 || e.keyCode ==13) {
+        setTimeout(() => {
+          this.getHomework()
+        }, 1000);
+      }
     },
     //获取作业列表
     getHomework() {

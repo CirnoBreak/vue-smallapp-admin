@@ -4,7 +4,7 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters">
         <el-form-item>
-          <el-input v-model="filters.title" @keyup.native="getNotice" placeholder="作业名称"></el-input>
+          <el-input v-model="filters.title" @keyup.native="searchNotice($event)" placeholder="通知标题"></el-input>
         </el-form-item>
         <el-select v-model="filters.grade" v-on:change="getNotice" placeholder="请选择班级">
           <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -120,6 +120,13 @@ export default {
     // 班级转换
     formatGrade(row, column) {
       return "15软件" + (row.grade + 1) + "班"
+    },
+    searchNotice(e) {
+      if (e.keyCode >=65 && e.keyCode <=90 || e.keyCode == 8 || e.keyCode ==13) {
+        setTimeout(() => {
+          this.getNotice()
+        }, 1000);
+      }
     },
     //获取通知列表
     getNotice() {

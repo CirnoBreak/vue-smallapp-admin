@@ -17,6 +17,8 @@ const user = {
     Login({commit}, userInfo) {
       return new Promise((resolve, reject) => {
         reqLogin(userInfo).then(response => {
+          console.log(response.user)
+          commit('SET_NAME', response.user.name)
           // const { user, token, code } = response
           // if (code === 200) {
           //   setToken(token)
