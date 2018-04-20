@@ -4,7 +4,7 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
 				<el-form-item>
-					<el-input v-model="filters.name" @keyup.native="searchStudents($event)" placeholder="姓名"></el-input>
+					<el-input v-model="filters.name" placeholder="姓名"></el-input>
 				</el-form-item>
 				<el-select v-model="filters.grade" v-on:change="getStudents" placeholder="请选择班级">
 					<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -42,7 +42,13 @@
 
 <script>
 import { getStudentListPage } from "../../api"
-
+const delay = (function() {
+  let timer = 0;
+  return function(callback, ms) {
+    clearTimeout(timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
 export default {
   data() {
     return {
@@ -90,6 +96,14 @@ export default {
       listLoading: false
     }
   },
+  watch: {
+    "filters.name"(e) {
+      console.log(e)
+      delay(() => {
+        this.getStudents();
+      }, 300);
+    },
+  },
   methods: {
     //性别显示转换
     formatSex(row, column) {
@@ -99,18 +113,11 @@ export default {
     formatGrade(row, column) {
       return "15软件" + (row.grade + 1) + "班"
     },
-    searchStudents(e) {
-      if (e.keyCode >=65 && e.keyCode <=90 || e.keyCode == 8 || e.keyCode ==13) {
-        setTimeout(() => {
-          this.getStudents()
-        }, 1000);
-      }
-    },
     //获学生列表
     getStudents() {
       let para = {
         page: this.page,
-        name: this.filters.name,
+        name: this.filters.name.trim(),
         grade: this.filters.grade
       }
       this.listLoading = true
